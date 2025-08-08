@@ -1,43 +1,43 @@
-# Commit 3: Kontroleri i API rute za Chat aplikaciju
+# Commit 4: WebSocket funkcionalnosti za Chat aplikaciju
 
 ## Opis komita
-Treći komit u projektu - kreiranje kontrolera i API ruta za Chat aplikaciju sa autentifikacijom.
+Četvrti komit u projektu - implementacija WebSocket funkcionalnosti za real-time chat komunikaciju.
 
 ## Šta je urađeno:
-- Kreiran AuthController sa metodama za registraciju, login, logout i me
-- Kreiran RoomController sa metodama za CRUD operacije i join/leave funkcionalnosti
-- Kreiran MessageController sa metodama za CRUD operacije na porukama
-- Konfigurisane API rute u routes/api.php
-- Instaliran Laravel Sanctum za autentifikaciju
-- Publikovane Sanctum migracije i konfiguracija
+- Kreiran MessageSent event za broadcast poruka
+- Kreiran UserJoinedRoom event za broadcast kada korisnik uđe u sobu
+- Kreiran UserLeftRoom event za broadcast kada korisnik napusti sobu
+- Ažurirani kontroleri da koriste broadcast eventove
+- Konfigurisana broadcasting konfiguracija za Pusher
+- Dodane WebSocket funkcionalnosti u MessageController i RoomController
 
-## Kontroleri:
+## Eventi:
 
-### AuthController
-- `register()` - registracija novog korisnika
-- `login()` - prijava korisnika
-- `logout()` - odjava korisnika
-- `me()` - dohvatanje trenutnog korisnika
+### MessageSent
+- Broadcastuje se kada se pošalje nova poruka
+- Koristi PresenceChannel za room.{room_id}
+- Šalje poruku sa podacima o korisniku
 
-### RoomController
-- `index()` - lista svih aktivnih soba
-- `store()` - kreiranje nove sobe
-- `show()` - prikaz sobe sa porukama
-- `update()` - izmena sobe (samo admin)
-- `destroy()` - brisanje sobe (samo admin)
-- `join()` - pridruživanje sobi
-- `leave()` - napuštanje sobe
+### UserJoinedRoom
+- Broadcastuje se kada korisnik uđe u sobu
+- Koristi PresenceChannel za room.{room_id}
+- Šalje podatke o korisniku i sobi
 
-### MessageController
-- `index()` - lista poruka u sobi sa paginacijom
-- `store()` - slanje nove poruke
-- `show()` - prikaz pojedinačne poruke
-- `update()` - izmena poruke (samo vlasnik)
-- `destroy()` - brisanje poruke (vlasnik ili admin)
+### UserLeftRoom
+- Broadcastuje se kada korisnik napusti sobu
+- Koristi PresenceChannel za room.{room_id}
+- Šalje podatke o korisniku i sobi
 
-## API Rute:
-- **Public**: `/api/register`, `/api/login`
-- **Protected**: sve ostale rute zahtevaju autentifikaciju
+## WebSocket funkcionalnosti:
+- Real-time slanje poruka
+- Real-time obaveštenja o ulasku/izlasku korisnika
+- Presence channels za praćenje online korisnika
+- Broadcast samo ostalim korisnicima (toOthers())
+
+## Konfiguracija:
+- Broadcasting driver: Pusher
+- Presence channels za svaku sobu
+- Eventi se šalju preko WebSocket-a
 
 ## Autori:
 - Masa Stevanovic
@@ -47,4 +47,7 @@ Treći komit u projektu - kreiranje kontrolera i API ruta za Chat aplikaciju sa 
 ## Datum: 7. avgust 2024.
 
 ## Napomene:
-Sve rute vraćaju JSON odgovore. U sledećim komitima će se dodavati WebSocket funkcionalnosti i frontend interfejs.
+Za testiranje WebSocket funkcionalnosti potrebno je:
+1. Kreirati Pusher nalog
+2. Konfigurisati Pusher credentials u .env fajlu
+3. Pokrenuti frontend aplikaciju sa WebSocket klijentom

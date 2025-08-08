@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Events\UserJoinedRoom;
+use App\Events\UserLeftRoom;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -168,6 +170,9 @@ class RoomController extends Controller
             'last_seen_at' => now()
         ]);
 
+        // Broadcast user joined event
+        broadcast(new UserJoinedRoom($user, $room))->toOthers();
+
         return response()->json([
             'success' => true,
             'message' => 'Joined room successfully',
@@ -184,6 +189,9 @@ class RoomController extends Controller
         $user = $request->user();
 
         $room->users()->detach($user->id);
+
+        // Broadcast user left event
+        broadcast(new UserLeftRoom($user, $room))->toOthers();
 
         return response()->json([
             'success' => true,

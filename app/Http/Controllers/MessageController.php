@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Room;
+use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -72,6 +73,9 @@ class MessageController extends Controller
             'content' => $request->content,
             'type' => $request->type ?? 'text',
         ]);
+
+        // Broadcast the message to all users in the room
+        broadcast(new MessageSent($message))->toOthers();
 
         return response()->json([
             'success' => true,
