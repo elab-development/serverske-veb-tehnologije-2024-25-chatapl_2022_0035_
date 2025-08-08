@@ -1,43 +1,50 @@
-# Commit 4: WebSocket funkcionalnosti za Chat aplikaciju
+# Commit 5: Frontend interfejs za Chat aplikaciju
 
 ## Opis komita
-Četvrti komit u projektu - implementacija WebSocket funkcionalnosti za real-time chat komunikaciju.
+Peti komit u projektu - kreiranje modernog frontend interfejsa za Chat aplikaciju sa WebSocket funkcionalnostima.
 
 ## Šta je urađeno:
-- Kreiran MessageSent event za broadcast poruka
-- Kreiran UserJoinedRoom event za broadcast kada korisnik uđe u sobu
-- Kreiran UserLeftRoom event za broadcast kada korisnik napusti sobu
-- Ažurirani kontroleri da koriste broadcast eventove
-- Konfigurisana broadcasting konfiguracija za Pusher
-- Dodane WebSocket funkcionalnosti u MessageController i RoomController
+- Kreiran moderni chat interfejs sa responsivnim dizajnom
+- Implementirana autentifikacija (login/register) sa token-based autentifikacijom
+- Dodana funkcionalnost za kreiranje i pridruživanje chat sobama
+- Implementiran real-time chat sa WebSocket konekcijom
+- Dodane notifikacije za korisničke akcije
+- Konfigurisane rute za pristup chat interfejsu
 
-## Eventi:
+## Frontend funkcionalnosti:
 
-### MessageSent
-- Broadcastuje se kada se pošalje nova poruka
-- Koristi PresenceChannel za room.{room_id}
-- Šalje poruku sa podacima o korisniku
+### Autentifikacija
+- Login forma sa email i password
+- Register forma sa validacijom
+- Token-based autentifikacija sa localStorage
+- Automatska provera postojeće sesije
 
-### UserJoinedRoom
-- Broadcastuje se kada korisnik uđe u sobu
-- Koristi PresenceChannel za room.{room_id}
-- Šalje podatke o korisniku i sobi
+### Chat interfejs
+- Sidebar sa listom dostupnih soba
+- Glavni chat prostor sa porukama
+- Real-time slanje i primanje poruka
+- Prikaz online korisnika
+- Notifikacije o ulasku/izlasku korisnika
 
-### UserLeftRoom
-- Broadcastuje se kada korisnik napusti sobu
-- Koristi PresenceChannel za room.{room_id}
-- Šalje podatke o korisniku i sobi
-
-## WebSocket funkcionalnosti:
-- Real-time slanje poruka
-- Real-time obaveštenja o ulasku/izlasku korisnika
+### WebSocket integracija
+- Pusher.js klijent za WebSocket konekciju
 - Presence channels za praćenje online korisnika
-- Broadcast samo ostalim korisnicima (toOthers())
+- Real-time broadcast poruka
+- Automatsko povezivanje sa soba
 
-## Konfiguracija:
-- Broadcasting driver: Pusher
-- Presence channels za svaku sobu
-- Eventi se šalju preko WebSocket-a
+## Tehnologije:
+- HTML5, CSS3, JavaScript (ES6+)
+- Axios za HTTP zahteve
+- Pusher.js za WebSocket konekciju
+- Modern CSS sa flexbox i grid
+- Responsive dizajn
+
+## Dizajn:
+- Moderna gradijent pozadina
+- Kartice sa senkama i zaobljenim ivicama
+- Animacije za hover efekte
+- Notifikacije sa slide-in animacijom
+- Responsive layout za različite veličine ekrana
 
 ## Autori:
 - Masa Stevanovic
@@ -47,7 +54,10 @@
 ## Datum: 7. avgust 2024.
 
 ## Napomene:
-Za testiranje WebSocket funkcionalnosti potrebno je:
-1. Kreirati Pusher nalog
+Za testiranje aplikacije:
+1. Pokrenuti Laravel server: `php artisan serve`
 2. Konfigurisati Pusher credentials u .env fajlu
-3. Pokrenuti frontend aplikaciju sa WebSocket klijentom
+3. Otvoriti aplikaciju u browseru na `http://localhost:8000`
+4. Registrovati se ili prijaviti sa postojećim nalogom
+5. Kreirati sobu ili pridružiti se postojećoj
+6. Testirati real-time chat funkcionalnosti
