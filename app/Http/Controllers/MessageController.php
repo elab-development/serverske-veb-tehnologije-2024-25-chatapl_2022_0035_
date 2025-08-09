@@ -8,6 +8,8 @@ use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class MessageController extends Controller
 {
@@ -28,10 +30,46 @@ class MessageController extends Controller
             ], 422);
         }
 
-        $messages = Message::with('user')
-            ->where('room_id', $request->room_id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(50);
+        // Create cache key based on request parameters
+        $cacheKey = 'messages_room_' . $request->room_id . '_' . md5(serialize($request->all()));
+        
+        // Try to get from cache first (shorter cache time for messages)
+        $messages = Cache::remember($cacheKey, 60, function () use ($request) {
+            $query = Message::with('user')->where('room_id', $request->room_id);
+
+            // Filter by user
+            if ($request->has('user_id')) {
+                $query->where('user_id', $request->user_id);
+            }
+
+            // Filter by type
+            if ($request->has('type')) {
+                $query->where('type', $request->type);
+            }
+
+            // Filter by date range
+            if ($request->has('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+
+            if ($request->has('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+
+            // Search in content
+            if ($request->has('search')) {
+                $query->where('content', 'like', '%' . $request->search . '%');
+            }
+
+            // Sort by
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+            $query->orderBy($sortBy, $sortOrder);
+
+            // Pagination
+            $perPage = $request->get('per_page', 50);
+            return $query->paginate($perPage);
+        });
 
         return response()->json([
             'success' => true,
@@ -73,6 +111,9 @@ class MessageController extends Controller
             'content' => $request->content,
             'type' => $request->type ?? 'text',
         ]);
+
+        // Clear cache for this room's messages
+        Cache::forget('messages_room_' . $request->room_id . '_*');
 
         // Broadcast the message to all users in the room
         broadcast(new MessageSent($message))->toOthers();
@@ -156,6 +197,101 @@ class MessageController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Message deleted successfully'
+        ]);
+    }
+
+    /**
+     * Upload file and create message
+     */
+    public function uploadFile(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'required|exists:rooms,id',
+            'file' => 'required|file|max:10240', // 10MB max
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Check if user is in the room
+        $room = Room::findOrFail($request->room_id);
+        if (!$room->users()->where('user_id', $request->user()->id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not a member of this room'
+            ], 403);
+        }
+
+        $file = $request->file('file');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('uploads', $fileName, 'public');
+
+        $message = Message::create([
+            'user_id' => $request->user()->id,
+            'room_id' => $request->room_id,
+            'content' => 'File uploaded: ' . $file->getClientOriginalName(),
+            'type' => 'file',
+            'file_path' => $filePath,
+            'file_name' => $file->getClientOriginalName(),
+            'file_size' => $file->getSize(),
+            'file_type' => $file->getMimeType(),
+        ]);
+
+        // Broadcast the message to all users in the room
+        broadcast(new MessageSent($message))->toOthers();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File uploaded successfully',
+            'data' => $message->load('user')
+        ], 201);
+    }
+
+    /**
+     * Download file
+     */
+    public function downloadFile(string $id): JsonResponse
+    {
+        $message = Message::findOrFail($id);
+
+        if (!$message->file_path) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No file attached to this message'
+            ], 404);
+        }
+
+        // Check if user is in the room
+        $room = $message->room;
+        if (!$room->users()->where('user_id', request()->user()->id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not a member of this room'
+            ], 403);
+        }
+
+        if (!Storage::disk('public')->exists($message->file_path)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        $filePath = Storage::disk('public')->path($message->file_path);
+        
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'download_url' => Storage::disk('public')->url($message->file_path),
+                'file_name' => $message->file_name,
+                'file_size' => $message->file_size,
+                'file_type' => $message->file_type,
+            ]
         ]);
     }
 }
