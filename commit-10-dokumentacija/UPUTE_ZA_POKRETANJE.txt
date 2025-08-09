@@ -1,0 +1,76 @@
+===========================================
+UPUTE ZA POKRETANJE CHAT APLIKACIJE
+===========================================
+
+📁 LOKACIJA PROJEKTA:
+/Users/masastevanovic/Desktop/Steh-domaci-laravel/commit-9-final-overview
+
+🚀 KORACI ZA POKRETANJE:
+
+1. OTVORITE TERMINAL (Terminal.app ili VSCode Terminal)
+
+2. IDITE U FOLDER PROJEKTA:
+   cd /Users/masastevanovic/Desktop/Steh-domaci-laravel/commit-9-final-overview
+
+3. PROVERITE DA LI STE U PRAVOM FOLDERU:
+   ls -la
+   (trebalo bi da vidite artisan, composer.json, app/ folder, itd.)
+
+4. POKRENITE LARAVEL DEVELOPMENT SERVER:
+   php artisan serve
+
+5. TREBALO BI DA VIDITE:
+   Starting Laravel development server: http://127.0.0.1:8000
+   Document root: /Users/masastevanovic/Desktop/Steh-domaci-laravel/commit-9-final-overview/public
+   Press Ctrl+C to quit.
+
+6. OTVORITE BROWSER I IDITE NA:
+   http://localhost:8000
+   ili
+   http://127.0.0.1:8000
+
+🔧 AKO IMATE PROBLEME:
+
+PROBLEM: "Could not open input file: artisan"
+REŠENJE: Niste u pravom folderu. Proverite da li ste u commit-9-final-overview folderu.
+
+PROBLEM: "Class not found" greške
+REŠENJE: Pokrenite:
+   composer install
+
+PROBLEM: Baza podataka ne radi
+REŠENJE: Pokrenite:
+   php artisan migrate:fresh --seed
+
+PROBLEM: Port 8000 je zauzet
+REŠENJE: Koristite drugi port:
+   php artisan serve --port=8001
+   Zatim idite na http://localhost:8001
+
+🧪 TEST KORISNICI:
+- Email: masa@example.com | Lozinka: password123
+- Email: luka@example.com | Lozinka: password123  
+- Email: andrej@example.com | Lozinka: password123
+
+📱 FUNKCIONALNOSTI ZA TESTIRANJE:
+✅ Registracija novog korisnika
+✅ Login sa postojećim korisnicima
+✅ Pregled chat soba
+✅ Pridruživanje sobama
+✅ Slanje poruka
+✅ Real-time komunikacija
+✅ Upload fajlova
+
+🛑 ZAUSTAVLJANJE SERVERA:
+- U terminalu gde je pokrenut server pritisnite: Ctrl+C
+
+📞 AKO I DALJE IMATE PROBLEME:
+1. Proverite da li imate PHP instaliran: php --version
+2. Proverite da li imate Composer instaliran: composer --version
+3. Proverite da li ste u pravom folderu: pwd
+4. Proverite da li postoje svi fajlovi: ls -la
+
+===========================================
+AUTORI: Masa Stevanovic, Luka Simic, Andrej Djordjevic
+DATUM: 7. avgust 2024.
+=========================================== 
