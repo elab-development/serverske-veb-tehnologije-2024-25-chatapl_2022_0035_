@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +44,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/messages/{id}', [MessageController::class, 'show']);
     Route::put('/messages/{id}', [MessageController::class, 'update']);
     Route::delete('/messages/{id}', [MessageController::class, 'destroy']);
+    Route::post('/messages/upload', [MessageController::class, 'uploadFile']);
+    Route::get('/messages/{id}/download', [MessageController::class, 'downloadFile']);
+
+    // Export routes
+    Route::get('/export/messages/{roomId}', [ExportController::class, 'exportMessages']);
+    Route::get('/export/room-stats/{roomId}', [ExportController::class, 'exportRoomStats']);
+
+    // Statistics routes
+    Route::get('/statistics/overall', [StatisticsController::class, 'overall']);
+    Route::get('/statistics/rooms/{roomId}', [StatisticsController::class, 'roomStats']);
+    Route::get('/statistics/users/{userId}', [StatisticsController::class, 'userStats']);
+    Route::post('/statistics/clear-cache', [StatisticsController::class, 'clearCache']);
 }); 
