@@ -38,8 +38,17 @@ class StatisticsController extends Controller
     /**
      * Get room statistics
      */
-    public function roomStats(string $roomId): JsonResponse
+    public function roomStats(Request $request): JsonResponse
     {
+        $roomId = $request->query('room_id');
+        
+        if (!$roomId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Room ID is required'
+            ], 400);
+        }
+        
         $cacheKey = 'room_stats_' . $roomId;
         
         $stats = Cache::remember($cacheKey, 300, function () use ($roomId) {
@@ -70,8 +79,17 @@ class StatisticsController extends Controller
     /**
      * Get user statistics
      */
-    public function userStats(string $userId): JsonResponse
+    public function userStats(Request $request): JsonResponse
     {
+        $userId = $request->query('user_id');
+        
+        if (!$userId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User ID is required'
+            ], 400);
+        }
+        
         $cacheKey = 'user_stats_' . $userId;
         
         $stats = Cache::remember($cacheKey, 300, function () use ($userId) {

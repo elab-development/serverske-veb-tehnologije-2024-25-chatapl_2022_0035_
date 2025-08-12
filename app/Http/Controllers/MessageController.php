@@ -115,8 +115,13 @@ class MessageController extends Controller
         // Clear cache for this room's messages
         Cache::forget('messages_room_' . $request->room_id . '_*');
 
-        // Broadcast the message to all users in the room
-        broadcast(new MessageSent($message))->toOthers();
+        // Broadcast the message to all users in the room (only if broadcasting is configured)
+        try {
+            broadcast(new MessageSent($message))->toOthers();
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Log::warning('Broadcasting failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,

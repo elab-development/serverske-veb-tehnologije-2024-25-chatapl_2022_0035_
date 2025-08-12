@@ -119,9 +119,45 @@
             margin: 0;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .online-users {
             font-size: 14px;
             opacity: 0.9;
+        }
+
+        .logout-button {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .refresh-button {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .messages-container {
@@ -384,7 +420,11 @@
         <div class="main-chat">
             <div class="chat-header">
                 <h2 id="currentRoomName">Select a room</h2>
-                <div class="online-users" id="onlineUsers">0 online</div>
+                <div class="header-right">
+                    <div class="online-users" id="onlineUsers">0 online</div>
+                    <button id="refreshMessagesButton" class="refresh-button">🔄 Refresh</button>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
             </div>
             
             <div class="messages-container" id="messagesContainer">
@@ -410,6 +450,40 @@
         // API base URL
         const API_BASE = '/api';
 
+        // Check for existing token on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = getToken();
+            if (token) {
+                // Set the token in axios headers
+                setToken(token);
+                
+                // Try to get current user with existing token
+                axios.get(`${API_BASE}/me`)
+                    .then(response => {
+                                            if (response.data.success) {
+                        currentUser = response.data.data.user;
+                        showChatInterface();
+                        loadRooms();
+                        
+                        // Restore current room after rooms are loaded
+                        setTimeout(() => {
+                            const savedRoomId = localStorage.getItem('current_room_id');
+                            if (savedRoomId) {
+                                console.log('Restoring room with ID:', savedRoomId);
+                                restoreCurrentRoom(parseInt(savedRoomId));
+                            }
+                        }, 1500);
+                    }
+                    })
+                    .catch(error => {
+                        console.error('Token validation error:', error);
+                        // Token is invalid, clear it
+                        clearToken();
+                        showLoginInterface();
+                    });
+            }
+        });
+
         // Axios configuration
         axios.defaults.baseURL = window.location.origin;
         axios.defaults.headers.common['Content-Type'] = 'application/json';
@@ -428,8 +502,10 @@
         }
 
         function setToken(token) {
+            console.log('Setting token:', token);
             localStorage.setItem('auth_token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            console.log('Authorization header set to:', axios.defaults.headers.common['Authorization']);
         }
 
         function getToken() {
@@ -438,24 +514,50 @@
 
         function clearToken() {
             localStorage.removeItem('auth_token');
+            localStorage.removeItem('current_room_id');
             delete axios.defaults.headers.common['Authorization'];
+        }
+
+        function saveCurrentRoom(room) {
+            if (room && room.id) {
+                localStorage.setItem('current_room_id', room.id.toString());
+                console.log('Saved current room ID:', room.id);
+            }
+        }
+
+        function restoreCurrentRoom(roomId) {
+            console.log('Trying to restore room with ID:', roomId);
+            const roomsList = document.getElementById('roomsList');
+            const roomElements = roomsList.querySelectorAll('.room-item');
+            
+            // For now, just click the first room to restore some room
+            if (roomElements.length > 0) {
+                console.log('Clicking first room to restore chat');
+                roomElements[0].click();
+            }
         }
 
         // Authentication functions
         async function login(email, password) {
             try {
+                console.log('Attempting login...');
                 const response = await axios.post(`${API_BASE}/login`, {
                     email,
                     password
                 });
                 
+                console.log('Login response:', response.data);
+                
                 if (response.data.success) {
                     setToken(response.data.data.token);
                     currentUser = response.data.data.user;
+                    console.log('Token set:', getToken());
+                    console.log('Authorization header:', axios.defaults.headers.common['Authorization']);
                     showChatInterface();
                     loadRooms();
                 }
             } catch (error) {
+                console.error('Login error:', error);
                 showNotification(error.response?.data?.message || 'Login failed', 'error');
             }
         }
@@ -519,12 +621,20 @@
         // Room functions
         async function loadRooms() {
             try {
+                console.log('Loading rooms...');
+                console.log('Token:', getToken());
+                console.log('Authorization header:', axios.defaults.headers.common['Authorization']);
+                
                 const response = await axios.get(`${API_BASE}/rooms`);
+                console.log('Rooms response:', response.data);
+                
                 if (response.data.success) {
                     displayRooms(response.data.data);
                 }
             } catch (error) {
-                showNotification('Failed to load rooms', 'error');
+                console.error('Error loading rooms:', error);
+                console.error('Error response:', error.response);
+                showNotification('Failed to load rooms: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
 
@@ -532,7 +642,10 @@
             const roomsList = document.getElementById('roomsList');
             roomsList.innerHTML = '';
             
-            rooms.forEach(room => {
+            // Handle paginated response - rooms.data contains the actual array
+            const roomsArray = rooms.data || rooms;
+            
+            roomsArray.forEach(room => {
                 const roomElement = document.createElement('div');
                 roomElement.className = 'room-item';
                 roomElement.innerHTML = `
@@ -547,9 +660,41 @@
 
         async function joinRoom(room) {
             try {
-                const response = await axios.post(`${API_BASE}/rooms/${room.id}/join`);
-                if (response.data.success) {
+                // Check if user is already in the room
+                const isAlreadyInRoom = room.users && room.users.some(user => user.id === currentUser.id);
+                
+                if (!isAlreadyInRoom) {
+                    // Try to join the room
+                    const response = await axios.post(`${API_BASE}/rooms/${room.id}/join`);
+                    if (!response.data.success) {
+                        showNotification('Failed to join room', 'error');
+                        return;
+                    }
+                }
+                
+                // Set current room and update UI
+                currentRoom = room;
+                saveCurrentRoom(room); // Save room to localStorage
+                document.getElementById('currentRoomName').textContent = room.name;
+                document.getElementById('messageInput').disabled = false;
+                document.querySelector('.send-button').disabled = false;
+                
+                // Update room selection
+                document.querySelectorAll('.room-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.target.closest('.room-item').classList.add('active');
+                
+                // Load messages and initialize Pusher
+                loadMessages();
+                initializePusher();
+                
+            } catch (error) {
+                // If error is "user already in room", just proceed
+                if (error.response?.data?.message?.includes('already in room')) {
+                    // Set current room and update UI
                     currentRoom = room;
+                    saveCurrentRoom(room); // Save room to localStorage
                     document.getElementById('currentRoomName').textContent = room.name;
                     document.getElementById('messageInput').disabled = false;
                     document.querySelector('.send-button').disabled = false;
@@ -560,23 +705,31 @@
                     });
                     event.target.closest('.room-item').classList.add('active');
                     
+                    // Load messages and initialize Pusher
                     loadMessages();
                     initializePusher();
+                } else {
+                    showNotification(error.response?.data?.message || 'Failed to join room', 'error');
                 }
-            } catch (error) {
-                showNotification(error.response?.data?.message || 'Failed to join room', 'error');
             }
         }
 
         // Message functions
         async function loadMessages() {
             try {
+                console.log('Loading messages for room:', currentRoom.id);
                 const response = await axios.get(`${API_BASE}/messages?room_id=${currentRoom.id}`);
+                console.log('Messages response:', response.data);
+                
                 if (response.data.success) {
-                    displayMessages(response.data.data.data.reverse());
+                    const messages = response.data.data.data || response.data.data;
+                    console.log('Messages to display:', messages);
+                    displayMessages(messages.reverse());
                 }
             } catch (error) {
-                showNotification('Failed to load messages', 'error');
+                console.error('Error loading messages:', error);
+                console.error('Error response:', error.response);
+                showNotification('Failed to load messages: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
 
@@ -615,56 +768,92 @@
 
         async function sendMessage(content) {
             try {
+                console.log('Sending message...');
+                console.log('Current room:', currentRoom);
+                console.log('Token:', getToken());
+                console.log('Authorization header:', axios.defaults.headers.common['Authorization']);
+                
                 const response = await axios.post(`${API_BASE}/messages`, {
                     room_id: currentRoom.id,
                     content: content
                 });
                 
+                console.log('Message sent successfully:', response.data);
+                
                 if (response.data.success) {
+                    // Clear input field
                     document.getElementById('messageInput').value = '';
+                    
+                    // Add message to UI immediately
+                    const message = response.data.data;
+                    addMessageToUI(message);
+                    
+                    // Show success notification
+                    showNotification('Message sent successfully!', 'success');
                 }
             } catch (error) {
+                console.error('Error sending message:', error);
+                console.error('Error response:', error.response);
                 showNotification(error.response?.data?.message || 'Failed to send message', 'error');
             }
         }
 
         // Pusher functions
         function initializePusher() {
+            // Skip Pusher if not configured
+            if (typeof Pusher === 'undefined') {
+                console.log('Pusher not available, skipping real-time features');
+                return;
+            }
+
             if (pusher) {
                 pusher.disconnect();
             }
 
-            // Initialize Pusher (you'll need to configure this with your Pusher credentials)
-            pusher = new Pusher('your-pusher-key', {
-                cluster: 'your-cluster',
-                authEndpoint: '/broadcasting/auth',
-                auth: {
-                    headers: {
-                        'Authorization': `Bearer ${getToken()}`,
-                        'Accept': 'application/json',
+            // Check if Pusher is properly configured
+            const pusherKey = 'your-pusher-key';
+            const pusherCluster = 'your-cluster';
+            
+            if (pusherKey === 'your-pusher-key' || pusherCluster === 'your-cluster') {
+                console.log('Pusher not configured, skipping real-time features');
+                return;
+            }
+
+            try {
+                // Initialize Pusher
+                pusher = new Pusher(pusherKey, {
+                    cluster: pusherCluster,
+                    authEndpoint: '/broadcasting/auth',
+                    auth: {
+                        headers: {
+                            'Authorization': `Bearer ${getToken()}`,
+                            'Accept': 'application/json',
+                        }
                     }
-                }
-            });
+                });
 
-            channel = pusher.subscribe(`presence-room.${currentRoom.id}`);
+                channel = pusher.subscribe(`presence-room.${currentRoom.id}`);
 
-            channel.bind('pusher:subscription_succeeded', (members) => {
-                document.getElementById('onlineUsers').textContent = `${Object.keys(members.members).length} online`;
-            });
+                channel.bind('pusher:subscription_succeeded', (members) => {
+                    document.getElementById('onlineUsers').textContent = `${Object.keys(members.members).length} online`;
+                });
 
-            channel.bind('pusher:member_added', (member) => {
-                document.getElementById('onlineUsers').textContent = `${Object.keys(channel.members.members).length} online`;
-                showNotification(`${member.info.name} joined the room`, 'success');
-            });
+                channel.bind('pusher:member_added', (member) => {
+                    document.getElementById('onlineUsers').textContent = `${Object.keys(channel.members.members).length} online`;
+                    showNotification(`${member.info.name} joined the room`, 'success');
+                });
 
-            channel.bind('pusher:member_removed', (member) => {
-                document.getElementById('onlineUsers').textContent = `${Object.keys(channel.members.members).length} online`;
-                showNotification(`${member.info.name} left the room`, 'error');
-            });
+                channel.bind('pusher:member_removed', (member) => {
+                    document.getElementById('onlineUsers').textContent = `${Object.keys(channel.members.members).length} online`;
+                    showNotification(`${member.info.name} left the room`, 'error');
+                });
 
-            channel.bind('App\\Events\\MessageSent', (data) => {
-                addMessageToUI(data.message);
-            });
+                channel.bind('App\\Events\\MessageSent', (data) => {
+                    addMessageToUI(data.message);
+                });
+            } catch (error) {
+                console.error('Pusher initialization error:', error);
+            }
         }
 
         // Event listeners
@@ -699,6 +888,19 @@
             const content = document.getElementById('messageInput').value.trim();
             if (content && currentRoom) {
                 sendMessage(content);
+            }
+        });
+
+        document.getElementById('logoutButton').addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+        });
+
+        document.getElementById('refreshMessagesButton').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentRoom) {
+                loadMessages();
+                showNotification('Messages refreshed!', 'success');
             }
         });
 

@@ -204,8 +204,16 @@ class RoomController extends Controller
             'last_seen_at' => now()
         ]);
 
-        // Broadcast user joined event
-        broadcast(new UserJoinedRoom($user, $room))->toOthers();
+        // Clear room cache to ensure fresh data
+        Cache::flush();
+
+        // Broadcast user joined event (only if broadcasting is configured)
+        try {
+            broadcast(new UserJoinedRoom($user, $room))->toOthers();
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Log::warning('Broadcasting failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,
@@ -224,8 +232,13 @@ class RoomController extends Controller
 
         $room->users()->detach($user->id);
 
-        // Broadcast user left event
-        broadcast(new UserLeftRoom($user, $room))->toOthers();
+        // Broadcast user left event (only if broadcasting is configured)
+        try {
+            broadcast(new UserLeftRoom($user, $room))->toOthers();
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Log::warning('Broadcasting failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,

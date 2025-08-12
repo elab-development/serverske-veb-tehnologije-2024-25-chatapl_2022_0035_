@@ -23,7 +23,7 @@ use App\Http\Controllers\PasswordResetController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/password/reset-link', [PasswordResetController::class, 'sendResetLink']);
+Route::post('/password/request-reset', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 
 // Protected routes
@@ -56,8 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Statistics routes
     Route::get('/statistics/overall', [StatisticsController::class, 'overall']);
-    Route::get('/statistics/rooms/{roomId}', [StatisticsController::class, 'roomStats']);
-    Route::get('/statistics/users/{userId}', [StatisticsController::class, 'userStats']);
+    Route::get('/statistics/room-stats', [StatisticsController::class, 'roomStats']);
+    Route::get('/statistics/user-stats', [StatisticsController::class, 'userStats']);
     Route::post('/statistics/clear-cache', [StatisticsController::class, 'clearCache']);
 
     // Password management routes
