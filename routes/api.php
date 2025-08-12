@@ -7,6 +7,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ use App\Http\Controllers\StatisticsController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/password/reset-link', [PasswordResetController::class, 'sendResetLink']);
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -56,4 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/statistics/rooms/{roomId}', [StatisticsController::class, 'roomStats']);
     Route::get('/statistics/users/{userId}', [StatisticsController::class, 'userStats']);
     Route::post('/statistics/clear-cache', [StatisticsController::class, 'clearCache']);
+
+    // Password management routes
+    Route::post('/password/change', [PasswordResetController::class, 'changePassword']);
 }); 
