@@ -8,6 +8,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\AuditController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +63,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Password management routes
     Route::post('/password/change', [PasswordResetController::class, 'changePassword']);
+
+    // Audit routes (admin only)
+    Route::middleware('admin')->group(function () {
+        Route::get('/audit/logs', [AuditController::class, 'index']);
+        Route::get('/audit/logs/{id}', [AuditController::class, 'show']);
+        Route::get('/audit/security-stats', [AuditController::class, 'securityStats']);
+        Route::get('/audit/suspicious-activities', [AuditController::class, 'suspiciousActivities']);
+        Route::get('/audit/failed-logins', [AuditController::class, 'failedLogins']);
+        Route::get('/audit/export', [AuditController::class, 'export']);
+    });
 }); 

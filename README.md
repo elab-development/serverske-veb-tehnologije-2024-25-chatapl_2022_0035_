@@ -66,6 +66,20 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - Sigurnosne mere za upravljanje lozinkama
 - Token-based resetovanje sa vremenskim ograničenjem
 
+### 9. Commit 9: Kompletna aplikacija
+- Sve prethodne funkcionalnosti
+- Finalna integracija i testiranje
+- Dokumentacija i README
+
+### 10. Commit 10: Napredne sigurnosne mere
+- **Rate Limiting**: Ograničenje zahteva po IP adresi
+- **CSRF Protection**: Dodatna zaštita od CSRF napada
+- **XSS Protection**: Sanitizacija korisničkih unosa
+- **SQL Injection Protection**: Prepared statements
+- **Input Validation**: Napredna validacija svih unosa
+- **Security Headers**: Dodatni HTTP security headers
+- **Audit Logging**: Praćenje sigurnosnih događaja
+
 ## Funkcionalnosti aplikacije
 
 ### ✅ Minimalni zahtevi
