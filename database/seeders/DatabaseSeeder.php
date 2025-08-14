@@ -13,13 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Run seeders in order
-        $this->call([
-            UserSeeder::class,
-            RoomSeeder::class,
-        ]);
+        // User::factory(10)->create();
 
-        // Create some sample messages
-        \App\Models\Message::factory(50)->create();
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
     }
 }

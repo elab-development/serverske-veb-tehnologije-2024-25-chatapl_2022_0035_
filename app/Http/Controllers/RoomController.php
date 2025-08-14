@@ -8,49 +8,15 @@ use App\Events\UserLeftRoom;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Cache;
 
 class RoomController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        // Create cache key based on request parameters
-        $cacheKey = 'rooms_' . md5(serialize($request->all()));
-        
-        // Try to get from cache first
-        $rooms = Cache::remember($cacheKey, 300, function () use ($request) {
-            $query = Room::with('users')->where('is_active', true);
-
-            // Filter by type
-            if ($request->has('type')) {
-                $query->where('type', $request->type);
-            }
-
-            // Filter by name (search)
-            if ($request->has('search')) {
-                $query->where('name', 'like', '%' . $request->search . '%')
-                      ->orWhere('description', 'like', '%' . $request->search . '%');
-            }
-
-            // Filter by user count
-            if ($request->has('min_users')) {
-                $query->whereHas('users', function($q) use ($request) {
-                    $q->havingRaw('COUNT(*) >= ?', [$request->min_users]);
-                });
-            }
-
-            // Sort by
-            $sortBy = $request->get('sort_by', 'created_at');
-            $sortOrder = $request->get('sort_order', 'desc');
-            $query->orderBy($sortBy, $sortOrder);
-
-            // Pagination
-            $perPage = $request->get('per_page', 10);
-            return $query->paginate($perPage);
-        });
+        $rooms = Room::with('users')->where('is_active', true)->get();
 
         return response()->json([
             'success' => true,
@@ -204,16 +170,8 @@ class RoomController extends Controller
             'last_seen_at' => now()
         ]);
 
-        // Clear room cache to ensure fresh data
-        Cache::flush();
-
-        // Broadcast user joined event (only if broadcasting is configured)
-        try {
-            broadcast(new UserJoinedRoom($user, $room))->toOthers();
-        } catch (\Exception $e) {
-            // Log the error but don't fail the request
-            \Log::warning('Broadcasting failed: ' . $e->getMessage());
-        }
+        // Broadcast user joined event
+        broadcast(new UserJoinedRoom($user, $room))->toOthers();
 
         return response()->json([
             'success' => true,
@@ -232,13 +190,8 @@ class RoomController extends Controller
 
         $room->users()->detach($user->id);
 
-        // Broadcast user left event (only if broadcasting is configured)
-        try {
-            broadcast(new UserLeftRoom($user, $room))->toOthers();
-        } catch (\Exception $e) {
-            // Log the error but don't fail the request
-            \Log::warning('Broadcasting failed: ' . $e->getMessage());
-        }
+        // Broadcast user left event
+        broadcast(new UserLeftRoom($user, $room))->toOthers();
 
         return response()->json([
             'success' => true,
