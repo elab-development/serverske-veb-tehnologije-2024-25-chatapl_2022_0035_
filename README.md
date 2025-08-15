@@ -80,6 +80,15 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **Security Headers**: Dodatni HTTP security headers
 - **Audit Logging**: Praćenje sigurnosnih događaja
 
+### 11. Commit 11: Napredne baze podataka funkcionalnosti
+- **Database Triggers**: Automatski pokretani SQL blokovi
+- **Stored Procedures**: Kompleksne SQL operacije
+- **Database Views**: Virtuelne tabele za kompleksne upite
+- **Database Transactions**: Atomične operacije
+- **Advanced Indexing**: Optimizacija performansi
+- **Database Constraints**: Referentni integritet
+- **Database Backup**: Automatsko pravljenje backup-a
+
 ## Funkcionalnosti aplikacije
 
 ### ✅ Minimalni zahtevi
