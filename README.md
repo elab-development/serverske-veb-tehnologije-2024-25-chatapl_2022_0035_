@@ -9,7 +9,7 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **Andrej Djordjevic**
 
 ## Datum
-16. avgust 2024.
+11. avgust 2024.
 
 ## Komitovi u projektu
 
@@ -99,6 +99,16 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **SMS Integration**: SMS obaveštenja
 - **Push Notifications**: Push obaveštenja
 - **Social Media Integration**: Deljenje na društvenim mrežama
+
+### 13. Commit 13: Napredne notifikacije i komunikacije
+- **Email Notifications**: Automatska email obaveštenja
+- **SMS Notifications**: SMS obaveštenja preko Twilio
+- **Push Notifications**: Web push obaveštenja
+- **In-App Notifications**: Unutrašnja obaveštenja
+- **Notification Preferences**: Podešavanja obaveštenja
+- **Notification Templates**: Predlošci za obaveštenja
+- **Notification History**: Istorija obaveštenja
+- **Bulk Notifications**: Masovna slanja obaveštenja
 
 ## Funkcionalnosti aplikacije
 
