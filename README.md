@@ -9,7 +9,7 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **Andrej Djordjevic**
 
 ## Datum
-11. avgust 2024.
+11. avgust 2025.
 
 ## Komitovi u projektu
 
