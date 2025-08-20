@@ -66,6 +66,56 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - Sigurnosne mere za upravljanje lozinkama
 - Token-based resetovanje sa vremenskim ograničenjem
 
+### 9. Commit 9: Kompletna aplikacija
+- Sve prethodne funkcionalnosti
+- Finalna integracija i testiranje
+- Dokumentacija i README
+
+### 10. Commit 10: Osnovne sigurnosne mere
+- **Rate Limiting**: Ograničenje zahteva po IP adresi
+- **CSRF Protection**: Dodatna zaštita od CSRF napada
+- **XSS Protection**: Sanitizacija korisničkih unosa
+- **Input Validation**: Napredna validacija svih unosa
+
+### 11. Commit 11: Napredne sigurnosne mere
+- **SQL Injection Protection**: Prepared statements i detekcija SQL injection napada
+- **Security Headers**: Dodatni HTTP security headers
+- **Audit Logging**: Praćenje sigurnosnih događaja
+
+### 12. Commit 12: Osnovne baze podataka funkcionalnosti
+- **Database Triggers**: Automatski pokretani SQL blokovi
+- **Stored Procedures**: Kompleksne SQL operacije
+- **Database Views**: Virtuelne tabele za kompleksne upite
+- **Database Transactions**: Atomične operacije
+- **Advanced Indexing**: Optimizacija performansi
+- **Database Constraints**: Referentni integritet
+- **Database Backup**: Automatsko pravljenje backup-a
+
+### 13. Commit 13: Napredne baze podataka funkcionalnosti
+- **Advanced Indexing**: Optimizacija performansi
+- **Database Constraints**: Referentni integritet
+- **Database Backup**: Automatsko pravljenje backup-a
+
+### 14. Commit 14: Osnovni web servisi
+- **External API Integration**: Integracija sa spoljnim servisima
+- **Weather API**: Prikaz vremena u chat sobi
+- **Translation API**: Automatski prevod poruka
+- **News API**: Prikaz vesti u sobi
+
+### 15. Commit 15: Napredni web servisi
+- **Currency API**: Konvertor valuta
+- **Email Integration**: Slanje email obaveštenja
+- **SMS Integration**: SMS obaveštenja
+- **Push Notifications**: Push obaveštenja
+- **Social Media Integration**: Deljenje na društvenim mrežama
+
+### 16. Commit 16: Osnovne notifikacije
+- **Email Notifications**: Automatska email obaveštenja
+- **SMS Notifications**: SMS obaveštenja preko Twilio
+- **Push Notifications**: Web push obaveštenja
+- **In-App Notifications**: Unutrašnja obaveštenja
+
+
 ## Funkcionalnosti aplikacije
 
 ### ✅ Minimalni zahtevi
@@ -134,6 +184,18 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - `GET /api/statistics/rooms/{roomId}` - Statistike sobe (protected)
 - `GET /api/statistics/users/{userId}` - Statistike korisnika (protected)
 - `POST /api/statistics/clear-cache` - Brisanje keša (protected)
+
+### Obaveštenja
+- `GET /api/notifications` - Lista obaveštenja (protected)
+- `GET /api/notifications/unread-count` - Broj nepročitanih obaveštenja (protected)
+- `PATCH /api/notifications/{id}/read` - Označi kao pročitano (protected)
+- `PATCH /api/notifications/mark-all-read` - Označi sva kao pročitana (protected)
+- `DELETE /api/notifications/{id}` - Obriši obaveštenje (protected)
+- `GET /api/notifications/preferences` - Podešavanja obaveštenja (protected)
+- `PUT /api/notifications/preferences` - Ažuriraj podešavanja (protected)
+- `POST /api/notifications/test` - Pošalji test obaveštenje (protected)
+- `POST /api/notifications/bulk` - Masovno slanje obaveštenja (protected)
+- `GET /api/notifications/statistics` - Statistike obaveštenja (protected)
 
 ## Modeli i odnosi
 

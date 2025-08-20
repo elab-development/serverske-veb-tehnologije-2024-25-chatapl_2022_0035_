@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Room;
+use App\Models\User;
 use App\Events\MessageSent;
+use App\Notifications\MessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 
 class MessageController extends Controller
 {
@@ -122,6 +125,9 @@ class MessageController extends Controller
             // Log the error but don't fail the request
             \Log::warning('Broadcasting failed: ' . $e->getMessage());
         }
+
+        // Send notifications to other users in the room
+        $this->sendMessageNotifications($message);
 
         return response()->json([
             'success' => true,
@@ -298,5 +304,32 @@ class MessageController extends Controller
                 'file_type' => $message->file_type,
             ]
         ]);
+    }
+
+    /**
+     * Send notifications to users in the room when a message is sent.
+     */
+    private function sendMessageNotifications(Message $message): void
+    {
+        try {
+            $sender = $message->user;
+            $room = $message->room;
+            
+            // Get all users in the room except the sender
+            $users = $room->users()
+                ->where('user_id', '!=', $sender->id)
+                ->where('message_notifications', true)
+                ->get();
+
+            foreach ($users as $user) {
+                // Only send notifications to users who have message notifications enabled
+                if ($user->shouldReceiveMessageNotifications()) {
+                    $user->notify(new MessageNotification($message, $sender));
+                }
+            }
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Log::warning('Failed to send message notifications: ' . $e->getMessage());
+        }
     }
 }
