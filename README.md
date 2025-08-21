@@ -9,7 +9,7 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **Andrej Djordjevic**
 
 ## Datum
-11. avgust 2025.
+11. avgust 2024.
 
 ## Komitovi u projektu
 
@@ -77,12 +77,7 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **XSS Protection**: Sanitizacija korisničkih unosa
 - **Input Validation**: Napredna validacija svih unosa
 
-### 11. Commit 11: Napredne sigurnosne mere
-- **SQL Injection Protection**: Prepared statements i detekcija SQL injection napada
-- **Security Headers**: Dodatni HTTP security headers
-- **Audit Logging**: Praćenje sigurnosnih događaja
-
-### 12. Commit 12: Osnovne baze podataka funkcionalnosti
+### 11. Commit 11: Napredne baze podataka funkcionalnosti
 - **Database Triggers**: Automatski pokretani SQL blokovi
 - **Stored Procedures**: Kompleksne SQL operacije
 - **Database Views**: Virtuelne tabele za kompleksne upite
@@ -91,30 +86,51 @@ Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim AP
 - **Database Constraints**: Referentni integritet
 - **Database Backup**: Automatsko pravljenje backup-a
 
-### 13. Commit 13: Napredne baze podataka funkcionalnosti
-- **Advanced Indexing**: Optimizacija performansi
-- **Database Constraints**: Referentni integritet
-- **Database Backup**: Automatsko pravljenje backup-a
-
-### 14. Commit 14: Osnovni web servisi
+### 12. Commit 12: Napredni web servisi i integracije
 - **External API Integration**: Integracija sa spoljnim servisima
 - **Weather API**: Prikaz vremena u chat sobi
 - **Translation API**: Automatski prevod poruka
 - **News API**: Prikaz vesti u sobi
-
-### 15. Commit 15: Napredni web servisi
 - **Currency API**: Konvertor valuta
 - **Email Integration**: Slanje email obaveštenja
 - **SMS Integration**: SMS obaveštenja
 - **Push Notifications**: Push obaveštenja
 - **Social Media Integration**: Deljenje na društvenim mrežama
 
-### 16. Commit 16: Osnovne notifikacije
+### 13. Commit 13: Napredne notifikacije i komunikacije
 - **Email Notifications**: Automatska email obaveštenja
 - **SMS Notifications**: SMS obaveštenja preko Twilio
 - **Push Notifications**: Web push obaveštenja
 - **In-App Notifications**: Unutrašnja obaveštenja
+- **Notification Preferences**: Podešavanja obaveštenja
+- **Notification Templates**: Predlošci za obaveštenja
+- **Notification History**: Istorija obaveštenja
+- **Bulk Notifications**: Masovna slanja obaveštenja
+- **Security Alert Notifications**: Sigurnosna upozorenja
+- **Room Invitation Notifications**: Pozivnice za sobe
+- **Message Notifications**: Obaveštenja o novim porukama
+- **Notification Service**: Centralizovano upravljanje obaveštenjima
+- **Notification Cleanup**: Automatsko čišćenje starih obaveštenja
 
+### 14. Commit 14: Napredna analitika i izveštavanje
+- **Advanced Analytics**: Napredna analitika korisnika
+- **Real-time Dashboard**: Dashboard u realnom vremenu
+- **Custom Reports**: Prilagođeni izveštaji
+- **Data Visualization**: Vizuelizacija podataka
+- **Performance Monitoring**: Praćenje performansi
+- **User Behavior Tracking**: Praćenje ponašanja korisnika
+- **A/B Testing**: A/B testiranje funkcionalnosti
+- **Predictive Analytics**: Prediktivna analitika
+
+### 15. Commit 15: Finalna optimizacija i deployment
+- **Performance Optimization**: Optimizacija performansi
+- **Caching Strategies**: Strategije keširanja
+- **Database Optimization**: Optimizacija baze podataka
+- **Security Hardening**: Ojačavanje sigurnosti
+- **Deployment Configuration**: Konfiguracija za deployment
+- **Monitoring & Logging**: Praćenje i logovanje
+- **Backup & Recovery**: Backup i oporavak
+- **Documentation & Testing**: Dokumentacija i testiranje
 
 ## Funkcionalnosti aplikacije
 

@@ -17,17 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'xss.protection' => \App\Http\Middleware\XssProtectionMiddleware::class,
             'csrf.protection' => \App\Http\Middleware\CsrfProtectionMiddleware::class,
             'input.validation' => \App\Http\Middleware\InputValidationMiddleware::class,
-            'sql.injection.protection' => \App\Http\Middleware\SqlInjectionProtectionMiddleware::class,
-            'security.headers' => \App\Http\Middleware\SecurityHeadersMiddleware::class,
-            'audit.logging' => \App\Http\Middleware\AuditLoggingMiddleware::class,
         ]);
         
         // Apply security middlewares globally
         $middleware->append(\App\Http\Middleware\XssProtectionMiddleware::class);
         $middleware->append(\App\Http\Middleware\InputValidationMiddleware::class);
-        $middleware->append(\App\Http\Middleware\SqlInjectionProtectionMiddleware::class);
-        $middleware->append(\App\Http\Middleware\SecurityHeadersMiddleware::class);
-        $middleware->append(\App\Http\Middleware\AuditLoggingMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
