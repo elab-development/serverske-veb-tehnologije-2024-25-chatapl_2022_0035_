@@ -73,7 +73,7 @@ php artisan serve
 
 #### **Korak 1: Otvori terminal i idi u projekat**
 ```bash
-cd /Users/masastevanovic/Desktop/STEH\ PROJEKAT/Commit-20
+cd /PUTANJA DO PROJEKTA
 ```
 
 #### **Korak 2: Proveri da li imaš sve potrebne fajlove**
