@@ -109,7 +109,7 @@ php artisan serve --host=127.0.0.1 --port=8000
 
 #### **Korak 8: U NOVOM terminalu, pokreni frontend (opciono)**
 ```bash
-cd /Users/masastevanovic/Desktop/STEH\ PROJEKAT/Commit-20
+cd /PUTANJA DO PROJEKTA
 npm run dev
 ```
 
