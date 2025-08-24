@@ -68,6 +68,8 @@ class User extends Authenticatable
     /**
      * Get the rooms for the user.
      */
+
+     //SLOZEN SQL UPIT
     public function rooms()
     {
         return $this->belongsToMany(Room::class, 'user_room')

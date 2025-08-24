@@ -1,336 +1,415 @@
-# Chat Application - Kompletna Laravel aplikacija
+# 🚀 Laravel Chat Aplikacija - Kompletna dokumentacija
 
-## Pregled projekta
-Kompletna Chat aplikacija sa real-time WebSocket funkcionalnostima, naprednim API-jem i modernim frontend interfejsom.
+## 📋 Sadržaj
+- [Opis projekta](#opis-projekta)
+- [Autori](#autori)
+- [Instalacija](#instalacija)
+- [Pokretanje](#pokretanje)
+- [API dokumentacija](#api-dokumentacija)
+- [Funkcionalnosti](#funkcionalnosti)
+- [Arhitektura](#arhitektura)
 
-## Autori
-- **Masa Stevanovic**
-- **Luka Simic**  
-- **Andrej Djordjevic**
+## 🎯 Opis projekta
 
-## Datum
-11. avgust 2024.
+**Laravel Chat Aplikacija** je napredna real-time chat aplikacija sa sledećim funkcionalnostima:
 
-## Komitovi u projektu
+- ✅ **Real-time chat** sa WebSocket komunikacijom
+- ✅ **Korisnički sistem** sa autentifikacijom
+- ✅ **Chat sobe** sa porukama, fajlovima i slikama
+- ✅ **REST API** sa 50+ endpoint-a
+- ✅ **Napredne sigurnosne mere**
+- ✅ **Integracija sa spoljnim API-jevima**
+- ✅ **Sistem notifikacija**
+- ✅ **Analitika i izveštaji**
 
-### 1. Commit 1: Inicijalna postavka
-- Laravel aplikacija (v12.2.0)
-- Pusher paket za WebSocket funkcionalnosti
-- Osnovna konfiguracija
+## 👥 Autori
 
-### 2. Commit 2: Modeli
-- **User**: Korisnici aplikacije
-- **Room**: Chat sobe/kanali
-- **Message**: Poruke u chatu
-- **UserRoom**: Pivot tabela za vezu korisnika i soba
-- Migracije sa odnosima između modela
+**Tim članovi:**
+- **Maša Stevanović**
+- **Andrej Đorđević** 
+- **Luka Simić**
 
-### 3. Commit 3: Kontroleri i API rute
-- **AuthController**: Registracija, login, logout, me
-- **RoomController**: CRUD operacije, join/leave funkcionalnosti
-- **MessageController**: CRUD operacije na porukama
-- Laravel Sanctum za autentifikaciju
-- REST API rute sa JSON odgovorima
+**Datum:** 20.08.2025.
 
-### 4. Commit 4: WebSocket funkcionalnosti
-- **MessageSent**: Event za broadcast poruka
-- **UserJoinedRoom**: Event za ulazak u sobu
-- **UserLeftRoom**: Event za izlazak iz sobe
-- Pusher konfiguracija za real-time komunikaciju
-- Presence channels za praćenje online korisnika
+## 🛠️ Instalacija
 
-### 5. Commit 5: Frontend interfejs
-- Moderna chat aplikacija sa JavaScript
-- Responsive dizajn sa CSS3
-- Real-time komunikacija sa Pusher.js
-- Autentifikacija sa token-based sistemom
-- Intuitivan korisnički interfejs
+### Preduslovi
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- SQLite (ili MySQL/PostgreSQL)
 
-### 6. Commit 6: Napredne funkcionalnosti
-- **Seeders i Factories**: Test podaci
-- **Paginacija i filtriranje**: Za sobe i poruke
-- **Export funkcionalnosti**: CSV format
-- **Upload/Download fajlova**: Do 10MB
-- Prošireni modeli sa dodatnim poljima
+### Koraci instalacije
 
-### 7. Commit 7: Keširanje podataka
-- Keširanje liste soba (5 minuta)
-- Keširanje poruka (1 minuta)
-- **StatisticsController**: Keširane statistike
-- Automatska invalidacija keša
-- Upravljanje kešom
+```bash
+# 1. Kloniraj projekat
+git clone <repository-url>
+cd Commit-20
 
-### 8. Commit 8: Finalne funkcionalnosti
-- **PasswordResetController**: Resetovanje zaboravljene lozinke
-- Promena lozinke autentifikovanog korisnika
-- Sigurnosne mere za upravljanje lozinkama
-- Token-based resetovanje sa vremenskim ograničenjem
+# 2. Instaliraj PHP dependencije
+composer install
 
-### 9. Commit 9: Kompletna aplikacija
-- Sve prethodne funkcionalnosti
-- Finalna integracija i testiranje
-- Dokumentacija i README
+# 3. Kopiraj environment fajl
+cp .env.example .env
 
-### 10. Commit 10: Osnovne sigurnosne mere
-- **Rate Limiting**: Ograničenje zahteva po IP adresi
-- **CSRF Protection**: Dodatna zaštita od CSRF napada
-- **XSS Protection**: Sanitizacija korisničkih unosa
-- **Input Validation**: Napredna validacija svih unosa
+# 4. Generiši aplikacijski ključ
+php artisan key:generate
 
-### 11. Commit 11: Napredne baze podataka funkcionalnosti
-- **Database Triggers**: Automatski pokretani SQL blokovi
-- **Stored Procedures**: Kompleksne SQL operacije
-- **Database Views**: Virtuelne tabele za kompleksne upite
-- **Database Transactions**: Atomične operacije
-- **Advanced Indexing**: Optimizacija performansi
-- **Database Constraints**: Referentni integritet
-- **Database Backup**: Automatsko pravljenje backup-a
+# 5. Kreiraj SQLite bazu podataka
+touch database/database.sqlite
 
-### 12. Commit 12: Napredni web servisi i integracije
-- **External API Integration**: Integracija sa spoljnim servisima
-- **Weather API**: Prikaz vremena u chat sobi
-- **Translation API**: Automatski prevod poruka
-- **News API**: Prikaz vesti u sobi
-- **Currency API**: Konvertor valuta
-- **Email Integration**: Slanje email obaveštenja
-- **SMS Integration**: SMS obaveštenja
-- **Push Notifications**: Push obaveštenja
-- **Social Media Integration**: Deljenje na društvenim mrežama
+# 6. Pokreni migracije
+php artisan migrate
 
-### 13. Commit 13: Napredne notifikacije i komunikacije
-- **Email Notifications**: Automatska email obaveštenja
-- **SMS Notifications**: SMS obaveštenja preko Twilio
-- **Push Notifications**: Web push obaveštenja
-- **In-App Notifications**: Unutrašnja obaveštenja
-- **Notification Preferences**: Podešavanja obaveštenja
-- **Notification Templates**: Predlošci za obaveštenja
-- **Notification History**: Istorija obaveštenja
-- **Bulk Notifications**: Masovna slanja obaveštenja
-- **Security Alert Notifications**: Sigurnosna upozorenja
-- **Room Invitation Notifications**: Pozivnice za sobe
-- **Message Notifications**: Obaveštenja o novim porukama
-- **Notification Service**: Centralizovano upravljanje obaveštenjima
-- **Notification Cleanup**: Automatsko čišćenje starih obaveštenja
+# 7. Instaliraj frontend dependencije
+npm install
 
-### 14. Commit 14: Napredna analitika i izveštavanje
-- **Advanced Analytics**: Napredna analitika korisnika
-- **Real-time Dashboard**: Dashboard u realnom vremenu
-- **Custom Reports**: Prilagođeni izveštaji
-- **Data Visualization**: Vizuelizacija podataka
-- **Performance Monitoring**: Praćenje performansi
-- **User Behavior Tracking**: Praćenje ponašanja korisnika
-- **A/B Testing**: A/B testiranje funkcionalnosti
-- **Predictive Analytics**: Prediktivna analitika
+# 8. Pokreni development server
+php artisan serve
+```
 
-### 15. Commit 15: Finalna optimizacija i deployment
-- **Performance Optimization**: Optimizacija performansi
-- **Caching Strategies**: Strategije keširanja
-- **Database Optimization**: Optimizacija baze podataka
-- **Security Hardening**: Ojačavanje sigurnosti
-- **Deployment Configuration**: Konfiguracija za deployment
-- **Monitoring & Logging**: Praćenje i logovanje
-- **Backup & Recovery**: Backup i oporavak
-- **Documentation & Testing**: Dokumentacija i testiranje
+## 🚀 Pokretanje
 
-## Funkcionalnosti aplikacije
+### Kako se tačno pokreće aplikacija
 
-### ✅ Minimalni zahtevi
-- [x] Laravel aplikacija sa 3+ povezana modela
-- [x] 5+ različitih tipova migracija
-- [x] API rute sa REST konvencijom
-- [x] JSON odgovori za sve rute
-- [x] Autentifikacija (login, logout, register)
-- [x] Zaštita ruta za autentifikovane korisnike
+#### **Korak 1: Otvori terminal i idi u projekat**
+```bash
+cd /Users/masastevanovic/Desktop/STEH\ PROJEKAT/Commit-20
+```
 
-### ✅ Zahtevi za višu ocenu (3+ implementirana)
-- [x] **Paginacija i filtriranje** - Za sobe i poruke
-- [x] **Resetovanje zaboravljene lozinke** - Token-based sistem
-- [x] **3 uloge u sistemu** - admin, moderator, member
-- [x] **Upload fajlova** - Do 10MB sa validacijom
-- [x] **Keširanje podataka** - Redis/file cache
-- [x] **Seeders i Factories** - Test podaci
-- [x] **Napredna pretraga** - Po sadržaju, datumu, korisniku
-- [x] **Export podataka** - CSV format
+#### **Korak 2: Proveri da li imaš sve potrebne fajlove**
+```bash
+ls -la
+# Treba da vidiš: artisan, composer.json, .env, database/ folder
+```
 
-### ✅ Chat funkcionalnosti
-- [x] **Real-time WebSocket komunikacija** - Pusher integracija
-- [x] **Chat sobe/kanali** - Public i private
-- [x] **Presence channels** - Praćenje online korisnika
-- [x] **Broadcast poruka** - Instant slanje
-- [x] **File sharing** - Upload i download fajlova
-- [x] **User management** - Join/leave sobe
+#### **Korak 3: Instaliraj PHP dependencije (ako nisi ranije)**
+```bash
+composer install
+```
 
-## API Endpoints
+#### **Korak 4: Generiši app key (ako nisi ranije)**
+```bash
+php artisan key:generate
+```
+
+#### **Korak 5: Kreiraj SQLite bazu (ako ne postoji)**
+```bash
+touch database/database.sqlite
+```
+
+#### **Korak 6: Pokreni migracije**
+```bash
+php artisan migrate
+```
+
+#### **Korak 7: Pokreni Laravel server**
+```bash
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+#### **Korak 8: U NOVOM terminalu, pokreni frontend (opciono)**
+```bash
+cd /Users/masastevanovic/Desktop/STEH\ PROJEKAT/Commit-20
+npm run dev
+```
+
+### **Kako proveriti da li radi:**
+
+#### **Opcija 1: Kroz browser**
+- Otvori: `http://127.0.0.1:8000`
+- Treba da vidiš Laravel welcome stranicu
+
+#### **Opcija 2: Kroz Postman**
+- Otvori Postman
+- Testiraj: `GET http://127.0.0.1:8000/api/rooms`
+
+#### **Opcija 3: Kroz terminal**
+```bash
+curl -X GET http://127.0.0.1:8000/api/rooms
+```
+
+### **Ako nešto ne radi:**
+
+#### **Problem: "Class not found"**
+```bash
+composer dump-autoload
+```
+
+#### **Problem: "Permission denied"**
+```bash
+chmod -R 755 storage/
+chmod -R 755 bootstrap/cache/
+```
+
+#### **Problem: "Database connection failed"**
+```bash
+# Proveri da li SQLite fajl postoji
+ls -la database/database.sqlite
+
+# Ako ne postoji, kreiraj ga
+touch database/database.sqlite
+```
+
+#### **Problem: "Server already in use"**
+```bash
+# Proveri koji proces koristi port 8000
+lsof -i :8000
+
+# Ubij proces
+kill -9 <PID>
+```
+
+### **Koraci za testiranje API-ja:**
+
+#### **1. Registracija korisnika**
+```bash
+curl -X POST http://127.0.0.1:8000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test Korisnik",
+    "email": "test@example.com",
+    "password": "password123",
+    "password_confirmation": "password123"
+  }'
+```
+
+#### **2. Prijava korisnika**
+```bash
+curl -X POST http://127.0.0.1:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "password123"
+  }'
+```
+
+#### **3. Kreiranje chat sobe**
+```bash
+# Prvo se uloguj i sačuvaj token
+TOKEN="your_auth_token_here"
+
+curl -X POST http://127.0.0.1:8000/api/rooms \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "name": "Test Soba",
+    "description": "Test opis sobe",
+    "type": "public"
+  }'
+```
+
+### **Koraci za Postman:**
+
+1. **Otvorite Postman**
+2. **Kreirajte novu kolekciju** - "Laravel Chat API"
+3. **Dodajte base URL:** `http://127.0.0.1:8000`
+4. **Dodajte rute:**
+   - `POST {{base_url}}/api/register`
+   - `POST {{base_url}}/api/login`
+   - `GET {{base_url}}/api/rooms`
+   - `POST {{base_url}}/api/rooms`
+   - `GET {{base_url}}/api/messages`
+   - `POST {{base_url}}/api/messages`
+   - `GET {{base_url}}/api/statistics/overall`
+   - `GET {{base_url}}/api/external/weather?city=Belgrade`
+
+### **Koraci za produkciju**
+```bash
+# Optimizuj aplikaciju
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Build frontend
+npm run build
+```
+
+## 📚 API dokumentacija
 
 ### Autentifikacija
-- `POST /api/register` - Registracija
-- `POST /api/login` - Prijava
-- `POST /api/logout` - Odjava (protected)
-- `GET /api/me` - Trenutni korisnik (protected)
 
-### Upravljanje lozinkama
-- `POST /api/password/reset-link` - Slanje reset linka
-- `POST /api/password/reset` - Resetovanje lozinke
-- `POST /api/password/change` - Promena lozinke (protected)
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| POST | `/api/register` | Registracija korisnika |
+| POST | `/api/login` | Login korisnika |
+| POST | `/api/logout` | Logout korisnika |
+| GET | `/api/me` | Dobavi informacije o korisniku |
 
-### Sobe
-- `GET /api/rooms` - Lista soba (sa filtriranjem i paginacijom)
-- `POST /api/rooms` - Kreiranje sobe (protected)
-- `GET /api/rooms/{id}` - Detalji sobe (protected)
-- `PUT /api/rooms/{id}` - Izmena sobe (protected, admin)
-- `DELETE /api/rooms/{id}` - Brisanje sobe (protected, admin)
-- `POST /api/rooms/{id}/join` - Pridruživanje sobi (protected)
-- `POST /api/rooms/{id}/leave` - Napuštanje sobe (protected)
+### Chat sobe
+
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| GET | `/api/rooms` | Lista svih soba |
+| POST | `/api/rooms` | Kreiraj novu sobu |
+| GET | `/api/rooms/{id}` | Detalji sobe |
+| PUT | `/api/rooms/{id}` | Ažuriraj sobu |
+| DELETE | `/api/rooms/{id}` | Obriši sobu |
+| POST | `/api/rooms/{id}/join` | Pridruži se sobi |
+| POST | `/api/rooms/{id}/leave` | Napusti sobu |
 
 ### Poruke
-- `GET /api/messages` - Lista poruka (sa filtriranjem i paginacijom)
-- `POST /api/messages` - Slanje poruke (protected)
-- `GET /api/messages/{id}` - Detalji poruke (protected)
-- `PUT /api/messages/{id}` - Izmena poruke (protected, vlasnik)
-- `DELETE /api/messages/{id}` - Brisanje poruke (protected, vlasnik/admin)
-- `POST /api/messages/upload` - Upload fajla (protected)
-- `GET /api/messages/{id}/download` - Download fajla (protected)
 
-### Export
-- `GET /api/export/messages/{roomId}` - Export poruka u CSV (protected)
-- `GET /api/export/room-stats/{roomId}` - Export statistika sobe (protected)
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| GET | `/api/messages` | Lista poruka |
+| POST | `/api/messages` | Pošalji poruku |
+| GET | `/api/messages/{id}` | Detalji poruke |
+| PUT | `/api/messages/{id}` | Ažuriraj poruku |
+| DELETE | `/api/messages/{id}` | Obriši poruku |
 
-### Statistike
-- `GET /api/statistics/overall` - Ukupne statistike (protected)
-- `GET /api/statistics/rooms/{roomId}` - Statistike sobe (protected)
-- `GET /api/statistics/users/{userId}` - Statistike korisnika (protected)
-- `POST /api/statistics/clear-cache` - Brisanje keša (protected)
+### Spoljni API servisi
 
-### Obaveštenja
-- `GET /api/notifications` - Lista obaveštenja (protected)
-- `GET /api/notifications/unread-count` - Broj nepročitanih obaveštenja (protected)
-- `PATCH /api/notifications/{id}/read` - Označi kao pročitano (protected)
-- `PATCH /api/notifications/mark-all-read` - Označi sva kao pročitana (protected)
-- `DELETE /api/notifications/{id}` - Obriši obaveštenje (protected)
-- `GET /api/notifications/preferences` - Podešavanja obaveštenja (protected)
-- `PUT /api/notifications/preferences` - Ažuriraj podešavanja (protected)
-- `POST /api/notifications/test` - Pošalji test obaveštenje (protected)
-- `POST /api/notifications/bulk` - Masovno slanje obaveštenja (protected)
-- `GET /api/notifications/statistics` - Statistike obaveštenja (protected)
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| GET | `/api/external/weather` | Vremenska prognoza |
+| POST | `/api/external/translate` | Prevod teksta |
+| GET | `/api/external/news` | Aktuelne vesti |
+| POST | `/api/external/currency` | Konverzija valuta |
+| GET | `/api/external/crypto-price` | Cene kriptovaluta |
 
-## Modeli i odnosi
+### Statistike i analitika
 
-### User
-- `hasMany` Message
-- `belongsToMany` Room (pivot: user_room)
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| GET | `/api/statistics/overall` | Opšte statistike |
+| GET | `/api/statistics/room-stats` | Statistike soba |
+| GET | `/api/statistics/user-stats` | Statistike korisnika |
 
-### Room
-- `hasMany` Message
-- `belongsToMany` User (pivot: user_room)
+### Eksport podataka
 
-### Message
-- `belongsTo` User
-- `belongsTo` Room
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| GET | `/api/export/messages/{roomId}` | Eksport poruka u CSV |
+| GET | `/api/export/room-stats/{roomId}` | Eksport statistika sobe |
 
-### UserRoom (pivot)
-- `user_id`, `room_id`
-- `role` (admin, moderator, member)
-- `is_online`, `last_seen_at`
+### Notifikacije
 
-## WebSocket Events
+| Metoda | Endpoint | Opis |
+|--------|----------|------|
+| GET | `/api/notifications` | Lista notifikacija |
+| GET | `/api/notifications/unread-count` | Broj nepročitanih |
+| PATCH | `/api/notifications/{id}/read` | Označi kao pročitano |
+| DELETE | `/api/notifications/{id}` | Obriši notifikaciju |
 
-### MessageSent
-- Channel: `presence-room.{roomId}`
-- Data: Poruka sa korisnikom
+## 🔧 Funkcionalnosti
 
-### UserJoinedRoom
-- Channel: `presence-room.{roomId}`
-- Data: Korisnik i soba
+### Sigurnost
+- **Rate Limiting** - Ograničenje zahteva po IP adresi
+- **XSS Protection** - Sanitizacija korisničkih unosa
+- **CSRF Protection** - Zaštita od CSRF napada
+- **SQL Injection Protection** - Detekcija SQL injection napada
+- **Security Headers** - HTTP security headers
+- **Audit Logging** - Praćenje svih događaja
 
-### UserLeftRoom
-- Channel: `presence-room.{roomId}`
-- Data: Korisnik i soba
+### Baza podataka
+- **Database Triggers** - Automatski pokretani SQL blokovi
+- **Database Views** - Virtuelne tabele za kompleksne upite
+- **Advanced Indexing** - Optimizacija performansi
+- **Database Constraints** - Referentni integritet
+- **Soft Deletes** - Logičko brisanje podataka
 
-## Tehnologije
+### Web servisi
+- **Weather API** - Integracija sa OpenWeatherMap
+- **Translation API** - Automatski prevod poruka
+- **News API** - Prikaz vesti u sobi
+- **Crypto API** - Informacije o kriptovalutama
 
-### Backend
-- **Laravel 12.2.0** - PHP framework
-- **Laravel Sanctum** - API autentifikacija
-- **Pusher** - WebSocket server
-- **SQLite** - Baza podataka
-- **Laravel Cache** - Keširanje
+### Napredne funkcionalnosti
+- **File Upload** - Slanje slika i fajlova
+- **Caching** - Keširanje podataka za bolje performanse
+- **Search & Filtering** - Napredna pretraga i filtriranje
+- **Pagination** - Straničenje rezultata
+- **Real-time Updates** - Trenutna ažuriranja kroz WebSocket
 
-### Frontend
-- **HTML5/CSS3** - Markup i stilizovanje
-- **JavaScript (ES6+)** - Interaktivnost
-- **Axios** - HTTP klijent
-- **Pusher.js** - WebSocket klijent
+## 🏗️ Arhitektura
 
-## Instalacija i pokretanje
+### Tehnologije
+- **Backend**: Laravel 12.2.0
+- **Database**: SQLite (produkcija: MySQL/PostgreSQL)
+- **Authentication**: Laravel Sanctum
+- **Frontend**: Vue.js + Vite
+- **Styling**: Tailwind CSS
 
-1. **Kloniranje projekta**
-   ```bash
-   git clone <repository-url>
-   cd chat-application
-   ```
+### Struktura projekta
+```
+Commit-20/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/     # API kontroleri
+│   │   └── Middleware/      # Sigurnosni middleware-i
+│   ├── Models/              # Eloquent modeli
+│   ├── Services/            # Poslovna logika
+│   ├── Events/              # Event-ovi
+│   └── Notifications/       # Notifikacije
+├── database/
+│   ├── migrations/          # Migracije baze podataka
+│   ├── seeders/             # Seed podaci
+│   └── factories/           # Factory klase
+├── routes/
+│   └── api.php             # API rute
+└── resources/
+    └── views/              # Blade template-ovi
+```
 
-2. **Instalacija zavisnosti**
-   ```bash
-   composer install
-   npm install
-   ```
+### Modeli i relacije
+- **User** - Korisnici sistema
+- **Room** - Chat sobe
+- **Message** - Poruke u sobama
+- **AuditLog** - Log aktivnosti
+- **Pivot tabela** - user_room (many-to-many relacija)
 
-3. **Konfiguracija**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+## 📊 Implementirane funkcionalnosti
 
-4. **Baza podataka**
-   ```bash
-   php artisan migrate
-   php artisan db:seed
-   ```
+### Minimalni zahtevi ✅
+- ✅ Laravel aplikacija
+- ✅ 3+ povezana modela (User, Room, Message, AuditLog)
+- ✅ 5+ tipova migracija (kreiranje, izmena, dodavanje, brisanje, indeksi)
+- ✅ REST API konvencija
+- ✅ JSON format za sve odgovore
+- ✅ Autentifikacija (login, logout, register)
+- ✅ Zaštita ruta (middleware)
 
-5. **Storage link**
-   ```bash
-   php artisan storage:link
-   ```
+### Dodatni zahtevi za višu ocenu ✅
+- ✅ **Paginacija i filtriranje** - StatisticsController
+- ✅ **Reset lozinke** - PasswordResetController
+- ✅ **3+ uloge** - admin, user, guest
+- ✅ **Upload fajlova** - FileController
+- ✅ **Keširanje** - CacheService
+- ✅ **Seeders/Factories** - Svi modeli
+- ✅ **Pretraga** - Search funkcionalnost
+- ✅ **Eksport** - CSV, PDF, ICS format
+- ✅ **Javni servis** - ExternalApiController
 
-6. **Pokretanje**
-   ```bash
-   php artisan serve
-   ```
+### Zahtevi za višu ocenu ✅
+- ✅ **4+ povezane tabele** - users, rooms, messages, audit_logs, user_room
+- ✅ **MVC pattern** - Laravel framework
+- ✅ **Sigurnost (2+ kriterijuma)** - CSRF, XSS, SQL injection zaštita
+- ✅ **Napredna manipulacija** - JOIN-ovi, agregacija, trigeri
+- ✅ **REST servis sa 4 metode** - POST, GET, PUT, DELETE
+- ✅ **Ugnježdene rute** - `/rooms/{id}/messages`
+- ✅ **2+ javna REST servisa** - Weather, Translation, News, Crypto API
 
-7. **Pristup aplikaciji**
-   - URL: `http://localhost:8000`
-   - Test korisnici: masa@example.com, luka@example.com, andrej@example.com
-   - Lozinka: `password123`
+## 🎯 Karakteristične funkcionalnosti
 
-## Testiranje
+### 1. Real-time Chat System
+Implementiran kroz Laravel Events i WebSocket komunikaciju, omogućavajući trenutnu razmenu poruka između korisnika.
 
-### Postman kolekcija
-- Importujte Postman kolekciju za testiranje API-ja
-- Testirajte sve endpointove sa autentifikacijom
-- Proverite WebSocket funkcionalnosti
+### 2. Napredna sigurnost
+Implementiran sistem zaštite od XSS, CSRF, SQL injection napada kroz custom middleware klase.
 
-### Frontend testiranje
-- Otvorite aplikaciju u browseru
-- Registrujte se ili prijavite
-- Testirajte real-time chat funkcionalnosti
-- Proverite upload/download fajlova
+### 3. Integracija sa spoljnim API-jevima
+Sistem automatski dohvata vremenske informacije, prevodi tekst i prikazuje aktuelne vesti.
 
-## Sigurnosne mere
+### 4. Audit logging
+Sve akcije korisnika se automatski beleže u audit log za sigurnosne potrebe.
 
-- **Token-based autentifikacija** - Laravel Sanctum
-- **Hash enkripcija** - Sigurno čuvanje lozinki
-- **Validacija** - Sve unose se validiraju
-- **CSRF zaštita** - Laravel CSRF tokeni
-- **Rate limiting** - Ograničenje zahteva
-- **File validation** - Provera upload-ovanih fajlova
+## 📄 Licenca
 
-## Performanse
+Ovaj projekat je licenciran pod MIT licencom.
 
-- **Keširanje** - Redis/file cache za česte upite
-- **Paginacija** - Ograničenje broja rezultata
-- **Eager loading** - Optimizovani upiti
-- **Indexing** - Database indeksi za brže pretrage
+---
 
-## Zaključak
+**Napomena**: Ova aplikacija je projekat iz predmeta serverske web tehnologije.
 
-Chat aplikacija je kompletno implementirana sa svim zahtevanim funkcionalnostima. Aplikacija podržava real-time komunikaciju, napredne API funkcionalnosti, sigurnosne mere i moderni korisnički interfejs. Svi zahtevi za minimalnu i višu ocenu su ispunjeni.
+**Datum završetka:** 20.08.2025.

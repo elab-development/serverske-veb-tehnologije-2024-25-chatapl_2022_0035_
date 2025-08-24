@@ -15,6 +15,9 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+     //SELECT
     public function index(Request $request): JsonResponse
     {
         // Create cache key based on request parameters
@@ -61,6 +64,8 @@ class RoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+     //INSERT
     public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -110,6 +115,8 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+     //UPDATE
     public function update(Request $request, string $id): JsonResponse
     {
         $room = Room::findOrFail($id);
@@ -152,6 +159,8 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     //DELETE
     public function destroy(string $id): JsonResponse
     {
         $room = Room::findOrFail($id);
