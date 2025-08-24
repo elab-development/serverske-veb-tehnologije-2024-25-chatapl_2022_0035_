@@ -44,7 +44,6 @@
 ```bash
 # 1. Kloniraj projekat
 git clone <repository-url>
-cd Commit-20
 
 # 2. Instaliraj PHP dependencije
 composer install
